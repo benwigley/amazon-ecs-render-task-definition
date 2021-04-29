@@ -19,7 +19,7 @@ Example to edit some attributes for the `web` container in the task definition f
 ```yaml
     - name: Render "web" ECS task definition
       id: render-web-container
-      uses: benwigley/amazon-ecs-render-task-definition@v2
+      uses: benwigley/amazon-ecs-render-task-definition@v2.0.3
       with:
         task-definition: task-definition.json
         container-name: web
@@ -27,7 +27,7 @@ Example to edit some attributes for the `web` container in the task definition f
 
     - name: Render "worker" ECS task definition
       id: render-worker-container
-      uses: benwigley/amazon-ecs-render-task-definition@v2
+      uses: benwigley/amazon-ecs-render-task-definition@v2.0.3
       with:
         task-definition: ${{ steps.render-web-container.outputs.task-definition }}
         container-name: web
