@@ -1155,8 +1155,12 @@ async function run() {
 
     // Permit these attrs to be passed as json strings, as GitHub Actions
     // don't currnelty allow array or hash values to be given as inputs
-    if (typeof containerAttrs === 'string') { containerAttrs = JSON.parse(containerAttrs) }
-    if (typeof containerNamesToRemove === 'string') { containerNamesToRemove = JSON.parse(containerNamesToRemove) }
+    if (typeof containerAttrs === 'string' && containerAttrs.length) {
+      containerAttrs = JSON.parse(containerAttrs)
+    }
+    if (typeof containerNamesToRemove === 'string' && containerNamesToRemove.length) {
+      containerNamesToRemove = JSON.parse(containerNamesToRemove)
+    }
 
     const containerAttrKeys = containerAttrs ? Object.getOwnPropertyNames(containerAttrs) : []
 
