@@ -14,7 +14,7 @@ Inserts a container image URI into an Amazon ECS task definition JSON file, crea
 
 ## Usage
 
-To insert the image URI `amazon/amazon-ecs-sample:latest` as the image for the `web` container in the task definition file, and then deploy the edited task definition file to ECS:
+Example to edit some attributes for the `web` container in the task definition file, and then deploy the edited task definition file to ECS:
 
 ```yaml
     - name: Render "web" ECS task definition
@@ -50,33 +50,26 @@ To insert the image URI `amazon/amazon-ecs-sample:latest` as the image for the `
 ```
 
 If your task definition file holds multiple containers in the `containerDefinitions`
-section which require updated image URIs, chain multiple executions of this action
+section which require updated attributes, chain multiple executions of this action
 together using the output value from the first action for the `task-definition`
 input of the second:
 
 ```yaml
     - name: Render Amazon ECS task definition for first container
-      id: render-web-container
+      id: render-web-1-container
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: web
-        image: amazon/amazon-ecs-sample-1:latest
+        container-name: web-1
+        container-attrs: '{ "image": "amazon/amazon-ecs-sample-1:latest" }'
 
     - name: Modify Amazon ECS task definition with second container
-      id: render-app-container
+      id: render-web-2-container
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-        container-name: app
-        image: amazon/amazon-ecs-sample-2:latest
-
-    - name: Deploy to Amazon ECS service
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.render-app-container.outputs.task-definition }}
-        service: my-service
-        cluster: my-cluster
+        task-definition: ${{ steps.render-web-1-container.outputs.task-definition }}
+        container-name: web-2
+        container-attrs: '{ "image": "amazon/amazon-ecs-sample-2:latest" }'
 ```
 
 See [action.yml](action.yml) for the full documentation for this action's inputs and outputs.
