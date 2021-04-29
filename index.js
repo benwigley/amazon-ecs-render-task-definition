@@ -50,8 +50,6 @@ async function run() {
 
     // Any containers to remove?
     if (containerNamesToRemove) {
-      console.log('containerNamesToRemove', containerNamesToRemove)
-      console.log('typeof containerNamesToRemove', typeof containerNamesToRemove)
       if (!Array.isArray(containerNamesToRemove)) {
         throw new Error(`containerNamesToRemove must be an array or blank but was type '${typeof containerNamesToRemove}'`);
       }
