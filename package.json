@@ -1,7 +1,7 @@
 {
-  "name": "aws-actions-amazon-ecs-render-task-definition",
-  "version": "1.0.20",
-  "description": "Render Amazon ECS task definition file",
+  "name": "aws-actions-amazon-ecs-render-task-definition-bw-edit",
+  "version": "2.0.0",
+  "description": "Render Amazon ECS task definition file. BW Edit.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint **.js",
@@ -18,12 +18,12 @@
     "Actions",
     "JavaScript"
   ],
-  "author": "AWS",
+  "author": "AWS, benwigley",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aws-actions/amazon-ecs-render-task-definition/issues"
+    "url": "https://github.com/benwigley/amazon-ecs-render-task-definition/issues"
   },
-  "homepage": "https://github.com/aws-actions/amazon-ecs-render-task-definition#readme",
+  "homepage": "https://github.com/benwigley/amazon-ecs-render-task-definition#readme",
   "dependencies": {
     "@actions/core": "^1.2.7",
     "tmp": "^0.2.1"
