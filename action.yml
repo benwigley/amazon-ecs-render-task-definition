@@ -11,10 +11,10 @@ inputs:
     description: 'The name of the container defined in the containerDefinitions section of the ECS task definition. Required if image or  is present'
     required: false
   container-attrs:
-    description: 'A hash of key values to set on the container definition, e.g. image, name, cpu, etc'
+    description: 'A hash (as a json string) of key values to set on the container definition, e.g. image, name, cpu, etc'
     required: false
   remove-containers:
-    description: 'An array of container names to be removed from the task definition'
+    description: 'An array (as a json string) of container names to be removed from the task definition'
     required: false
 outputs:
   task-definition:

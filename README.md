@@ -23,8 +23,7 @@ To insert the image URI `amazon/amazon-ecs-sample:latest` as the image for the `
       with:
         task-definition: task-definition.json
         container-name: web
-        container-attrs:
-          image: amazon/amazon-ecs-sample:latest
+        container-attrs: '{ "image": "amazon/amazon-ecs-sample:latest" }'
 
     - name: Render "worker" ECS task definition
       id: render-worker-container
@@ -32,13 +31,8 @@ To insert the image URI `amazon/amazon-ecs-sample:latest` as the image for the `
       with:
         task-definition: ${{ steps.render-web-container.outputs.task-definition }}
         container-name: web
-        container-attrs:
-          image: amazon/amazon-ecs-sample:latest
-          name: web-worker
-          cpu: 256
-          memory: 512
-        remove-containers:
-          - sidecarr
+        container-attrs: '{ "image": "amazon/amazon-ecs-sample:latest", "name": "web-worker", "cpu": 256, "memory": 512 }'
+        remove-containers: '["sidecarr"]'
 
     - name: Deploy web to Amazon ECS service
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1

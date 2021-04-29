@@ -8,8 +8,13 @@ async function run() {
     // Get inputs
     const taskDefinitionFile = core.getInput('task-definition', { required: true });
     const containerName = core.getInput('container-name', { required: false });
-    const containerAttrs = core.getInput('container-attrs', { required: false });
-    const containerNamesToRemove = core.getInput('remove-containers', { required: false });
+    let containerAttrs = core.getInput('container-attrs', { required: false });
+    let containerNamesToRemove = core.getInput('remove-containers', { required: false });
+
+    // Permit these attrs to be passed as json strings, as GitHub Actions
+    // don't currnelty allow array or hash values to be given as inputs
+    if (typeof containerAttrs === 'string') { containerAttrs = JSON.parse(containerAttrs) }
+    if (typeof containerNamesToRemove === 'string') { containerNamesToRemove = JSON.parse(containerNamesToRemove) }
 
     const containerAttrKeys = containerAttrs ? Object.getOwnPropertyNames(containerAttrs) : []
 
