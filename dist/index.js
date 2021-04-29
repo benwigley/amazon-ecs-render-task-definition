@@ -1149,8 +1149,11 @@ async function run() {
   try {
     // Get inputs
     const taskDefinitionFile = core.getInput('task-definition', { required: true });
-    const containerName = core.getInput('container-name', { required: true });
-    const imageURI = core.getInput('image', { required: true });
+    const containerName = core.getInput('container-name', { required: false });
+    const containerAttrs = core.getInput('container-attrs', { required: false });
+    const containerNamesToRemove = core.getInput('remove-containers', { required: false });
+
+    const containerAttrKeys = containerAttrs ? Object.getOwnPropertyNames(containerAttrs) : []
 
     // Parse the task definition
     const taskDefPath = path.isAbsolute(taskDefinitionFile) ?
@@ -1161,17 +1164,42 @@ async function run() {
     }
     const taskDefContents = require(taskDefPath);
 
-    // Insert the image URI
+    // Validate the task defintion
     if (!Array.isArray(taskDefContents.containerDefinitions)) {
       throw new Error('Invalid task definition format: containerDefinitions section is not present or is not an array');
     }
-    const containerDef = taskDefContents.containerDefinitions.find(function(element) {
-      return element.name == containerName;
-    });
-    if (!containerDef) {
-      throw new Error('Invalid task definition: Could not find container definition with matching name');
+
+    // Require containerName if any container atttibutes present
+    if (containerAttrKeys.length) {
+      if (!containerName) { throw new Error('containerName is required when using containerAttrs'); }
+
+      // Get the container definition
+      const containerDef = taskDefContents.containerDefinitions.find(function(element) {
+        return element.name == containerName;
+      });
+      if (!containerDef) {
+        throw new Error(`Invalid task definition: Container definition '${containerName}' not found`);
+      }
+
+      // Handle changes to container definition
+      containerAttrKeys.forEach(function(key) { containerDef[key] = containerAttrs[key] })
     }
-    containerDef.image = imageURI;
+
+    // Any containers to remove?
+    if (containerNamesToRemove) {
+      if (!Array.isArray(containerNamesToRemove)) {
+        throw new Error('containerNamesToRemove must be an array or blank');
+      }
+      containerNamesToRemove.forEach(function(nameToRemove) {
+        const containerIndex = taskDefContents.containerDefinitions.findIndex(function(containerDef) {
+          return containerDef.name === nameToRemove;
+        });
+        if (containerIndex === -1) {
+          throw new Error(`Unable to remove container with name '${nameToRemove}'. Not found`);
+        }
+        taskDefContents.containerDefinitions.splice(containerIndex, 1)
+      })
+    }
 
     // Write out a new task definition file
     var updatedTaskDefFile = tmp.fileSync({
