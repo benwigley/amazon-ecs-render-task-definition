@@ -1193,7 +1193,7 @@ async function run() {
     // Any containers to remove?
     if (containerNamesToRemove) {
       if (!Array.isArray(containerNamesToRemove)) {
-        throw new Error('containerNamesToRemove must be an array or blank');
+        throw new Error(`containerNamesToRemove must be an array or blank but was type '${typeof containerNamesToRemove}'`);
       }
       containerNamesToRemove.forEach(function(nameToRemove) {
         const containerIndex = taskDefContents.containerDefinitions.findIndex(function(containerDef) {
