@@ -1148,10 +1148,11 @@ const fs = __webpack_require__(747);
 async function run() {
   try {
     // Get inputs
-    const taskDefinitionFile = core.getInput('task-definition', { required: true });
-    const containerName = core.getInput('container-name', { required: false });
-    let containerAttrs = core.getInput('container-attrs', { required: false });
-    let containerNamesToRemove = core.getInput('remove-containers', { required: false });
+    const taskDefinitionFile    = core.getInput('task-definition', { required: true });
+    const familyName            = core.getInput('family', { required: false });
+    const containerName         = core.getInput('container-name', { required: false });
+    let containerAttrs          = core.getInput('container-attrs', { required: false });
+    let containerNamesToRemove  = core.getInput('remove-containers', { required: false });
 
     // Permit these attrs to be passed as json strings, as GitHub Actions
     // don't currnelty allow array or hash values to be given as inputs
@@ -1177,6 +1178,9 @@ async function run() {
     if (!Array.isArray(taskDefContents.containerDefinitions)) {
       throw new Error('Invalid task definition format: containerDefinitions section is not present or is not an array');
     }
+
+    // Allow the name that shows up in the ecs console for the task definition
+    if (familyName) { taskDefContents.family = familyName }
 
     // Require containerName if any container atttibutes present
     if (containerAttrKeys.length) {
