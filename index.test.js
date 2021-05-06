@@ -14,6 +14,7 @@ describe('Render task definition', () => {
 
     core.getInput = jest.fn()
       .mockReturnValueOnce('task-definition.json')  // task-definition
+      .mockReturnValueOnce('web-production')        // family-name
       .mockReturnValueOnce('web')                   // container-name
       .mockReturnValueOnce({                        // container-attrs
         image: 'nginx:latest',
@@ -57,7 +58,7 @@ describe('Render task definition', () => {
   //   });
   //   expect(fs.writeFileSync).toHaveBeenNthCalledWith(1, 'new-task-def-file-name',
   //     JSON.stringify({
-  //       family: 'task-def-family',
+  //       family: 'web-production',
   //       containerDefinitions: [
   //         {
   //           name: "web-new-name",
@@ -73,6 +74,7 @@ describe('Render task definition', () => {
   test('renders a task definition at an absolute path', async () => {
     core.getInput = jest.fn()
       .mockReturnValueOnce('/hello/task-definition.json') // task-definition
+      .mockReturnValueOnce('web-production')              // family-name
       .mockReturnValueOnce('web')                         // container-name
       .mockReturnValueOnce({                              // container-attrs
         image: 'nginx:latest',
@@ -100,7 +102,7 @@ describe('Render task definition', () => {
     });
     expect(fs.writeFileSync).toHaveBeenNthCalledWith(1, 'new-task-def-file-name',
       JSON.stringify({
-        family: 'task-def-family',
+        family: 'web-production',
         containerDefinitions: [
           {
             name: "web-new-name",
@@ -116,6 +118,7 @@ describe('Render task definition', () => {
   test('permits json string values to be given', async () => {
     core.getInput = jest.fn()
       .mockReturnValueOnce('task-definition.json')  // task-definition
+      .mockReturnValueOnce('web-production')        // family-name
       .mockReturnValueOnce('web')                   // container-name
       .mockReturnValueOnce('{ "image": "nginx:latest", "name": "web-new-name" }') // container-attrs
       .mockReturnValueOnce('[ "sidecar" ]');        // remove-containers
@@ -123,7 +126,7 @@ describe('Render task definition', () => {
     await run();
     expect(fs.writeFileSync).toHaveBeenNthCalledWith(1, 'new-task-def-file-name',
       JSON.stringify({
-        family: 'task-def-family',
+        family: 'web-production',
         containerDefinitions: [
           {
             name: "web-new-name",
@@ -139,6 +142,7 @@ describe('Render task definition', () => {
     fs.existsSync.mockReturnValue(false);
     core.getInput = jest.fn()
       .mockReturnValueOnce('no-task-def.json')      // task-definition
+      .mockReturnValueOnce('web-production')        // family-name
       .mockReturnValueOnce('web')                   // container-name
       .mockReturnValueOnce({                        // container-attrs
         image: 'nginx:latest',
@@ -157,6 +161,7 @@ describe('Render task definition', () => {
 
     core.getInput = jest.fn()
       .mockReturnValueOnce('non-json-task-def.json')  // task-definition
+      .mockReturnValueOnce('web-production')          // family-name
       .mockReturnValueOnce('web')                     // container-name
       .mockReturnValueOnce({                          // container-attrs
         image: 'nginx:latest'
@@ -177,6 +182,7 @@ describe('Render task definition', () => {
 
     core.getInput = jest.fn()
       .mockReturnValueOnce('malformed-task-def.json') // task-definition
+      .mockReturnValueOnce('web-production')        // family-name
       .mockReturnValueOnce('web')                     // container-name
       .mockReturnValueOnce({                          // container-attrs
         image: 'nginx:latest'
@@ -202,6 +208,7 @@ describe('Render task definition', () => {
 
     core.getInput = jest.fn()
       .mockReturnValueOnce('missing-container-task-def.json') // task-definition
+      .mockReturnValueOnce('web-production')                  // family-name
       .mockReturnValueOnce('web')                             // container-name
       .mockReturnValueOnce({                                  // container-attrs
         image: 'nginx:latest'
